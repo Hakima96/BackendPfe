@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Calculate:</h1>
+
+    <p>
+      <br /><input type="number" value="0" id="input1" /><br />
+      <br /><input type="number" value="0" id="input2" /><br />
+    </p>
+
+    <p>
+      <button id="Calculate" id="Calculate">Calculate</button>
+    </p>
+
+    <p id="Result"></p>
+
+    <script src="plus.js"></script>
+    <script>
+      let Input1 = document.getElementById("input1");
+      let Input2 = document.getElementById("input2");
+
+      Module.onRuntimeInitialized = function () {
+        document
+          .getElementById("Calculate")
+          .addEventListener("click", async function () {
+            const result = Module._plus(
+              parseInt(Input1.value),
+              parseInt(Input2.value)
+            );
+
+            document.getElementById(
+              "Result"
+            ).innerText = `Result from WASM: ${result}`;
+          });
+      };
+      //   document.getElementById("Add").addEventListener("click", () => {
+      //     const input = document.createElement("input");
+      //     input.type = "number";
+      //     input.value = 0;
+
+      //     const br1 = document.createElement("br");
+      //     const br2 = document.createElement("br");
+
+      //     Inputs.appendChild(br1);
+      //     Inputs.appendChild(input);
+      //     Inputs.appendChild(br2);
+      //   });
+    </script>
+  </body>
+</html>

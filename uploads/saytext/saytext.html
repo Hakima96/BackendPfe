@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Emscripten-Generated Code</title>
+    <style>
+      body {
+        font-family: arial;
+        margin: 0;
+        padding: none;
+      }
+
+      #output {
+        width: 100%;
+        height: 200px;
+        margin: 0 auto;
+        margin-top: 10px;
+        border: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        display: block;
+        background-color: black;
+        color: white;
+        font-family: "Lucida Console", Monaco, monospace;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" placeholder="HelloWorld" id="input" /><button
+      onclick="Print()"
+    >
+      Print
+    </button>
+    <textarea id="output" rows="8" style="margin: 0; padding: 0"></textarea>
+
+    <script type="text/javascript">
+      // var statusElement = document.getElementById('status');
+      // var progressElement = document.getElementById('progress');
+      // var spinnerElement = document.getElementById('spinner');
+
+      var Module = {
+        print: (function () {
+          var element = document.getElementById("output");
+          if (element) element.value = ""; // clear browser cache
+          return (...args) => {
+            var text = args.join(" ");
+            text = text.replace(/&/g, "&amp;");
+            text = text.replace(/</g, "&lt;");
+            text = text.replace(/>/g, "&gt;");
+            text = text.replace("\n", "<br>", "g");
+            console.log(text);
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; 
+            }
+          };
+        })(),
+      };
+      const input = document.getElementById("input");
+      function Print() {
+        const inputValue = input.value;
+
+        const lengthBytes = Module.lengthBytesUTF8(inputValue) + 1;
+        const stringOnWasmHeap = Module._malloc(lengthBytes);
+
+        Module.stringToUTF8(inputValue, stringOnWasmHeap, lengthBytes);
+
+        Module._print(stringOnWasmHeap);
+
+        Module._free(stringOnWasmHeap);
+      }
+    </script>
+    <script async type="text/javascript" src="saytext.js"></script>
+  </body>
+</html>
