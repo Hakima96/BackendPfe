@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const db = require("./db/connect");
 const path = require("path");
@@ -30,8 +31,9 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 5000;
 const start = async () => {
   try {
+console.log(process.env.MONGODB_URI)
     await db(process.env.MONGODB_URI);
-    app.listen(port, () => console.log(Server listening on port ${port}...));
+    app.listen(port, () => console.log(`Server listening on port ${port}...`));
   } catch (error) {
     console.log(error);
   }
